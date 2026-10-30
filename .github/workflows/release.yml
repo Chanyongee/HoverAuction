@@ -1,0 +1,28 @@
+name: Package and release
+
+# 태그를 푸시할 때만 돈다.
+# 브랜치 푸시에도 돌게 하면 CurseForge에 알파 파일이 계속 올라간다.
+on:
+  push:
+    tags:
+      - '**'
+
+permissions:
+  contents: write # 패키저가 GitHub 릴리스를 만들 수 있어야 한다
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+      GH_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Clone project
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # 변경 이력 전체. 체인지로그 생성에 필요하다.
+
+      - name: Package and release
+        uses: BigWigsMods/packager@v2
+        with:
+          pandoc: false # WoWInterface 에 올리지 않으므로 불필요

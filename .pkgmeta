@@ -1,0 +1,9 @@
+# https://github.com/BigWigsMods/packager
+package-as: HoverAuction
+
+# 단일 폴더 애드온이고 외부 라이브러리가 없다.
+enable-nolib-creation: no
+enable-toc-creation: no
+
+ignore:
+  - .github
