@@ -42,7 +42,14 @@ with `/ha guard off`.
 ```
 
 `/ha qty all` works by pressing Blizzard's own "Max" button for you, so it costs one extra press
-(load → max → post). Items whose quantity box never appears skip that step entirely.
+(load → max → post). It applies to **commodities only** — stackable goods like herbs and ore.
+
+Equipment is deliberately left at quantity 1. Posting a non-commodity item at quantity 2 or more
+goes through Blizzard's multisell path, and `AuctionHouseItemSellFrameMixin:ClearPost` only empties
+the sell slot when the quantity is 1. The sell frame is then left pointing at a bag slot the items
+have already left, and the next search result raises a Lua error inside Blizzard's
+`UpdateNoneAvailableEntry`, which checks that the stored item location is not `nil` but never checks
+that it is still valid. You can still post several copies by typing the quantity yourself.
 
 ## Design note: avoiding taint
 

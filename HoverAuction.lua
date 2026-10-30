@@ -292,8 +292,19 @@ local function GetPopupAcceptButton()
 end
 
 -- '최대' 버튼을 한 번 거쳐야 하는 상황인지. (수량 입력은 애드온이 직접 쓸 수 없다.)
+--
+-- 묶음 상품에서만 쓴다. 장비 같은 개별 아이템을 수량 2개 이상으로 올리면
+-- 블리자드의 다중 판매 경로를 타는데, 그쪽 ClearPost 는 수량이 1일 때만 판매창을 비운다.
+-- 그래서 등록이 끝나도 판매창이 이미 사라진 가방 칸을 계속 가리키고,
+-- 다음 시세 조회 결과가 도착하면 블리자드 코드가 거기서 오류를 낸다.
+--   Blizzard_AuctionHouseItemSellFrame.lua:202
+--   bad argument #1 to 'GetCurrentItemLevel'
+-- 상품 판매창은 수량과 무관하게 항상 비우므로 안전하다.
 local function NeedsMaxQuantityStep(sellFrame)
 	if db.quantity ~= "all" then return false end
+
+	local ah = GetAuctionHouse()
+	if not ah or sellFrame ~= ah.CommoditiesSellFrame then return false end
 
 	local input = sellFrame.QuantityInput
 	if not input or not input:IsShown() then return false end
@@ -444,7 +455,7 @@ end)
 
 local QUANTITY_LABEL = {
 	one = "1개 (블리자드 기본)",
-	all = "최대 (키를 한 번 더 누름)",
+	all = "묶음 상품만 최대 (키를 한 번 더 누름)",
 }
 
 local function OnOff(value)
