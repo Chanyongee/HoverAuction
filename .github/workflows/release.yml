@@ -22,6 +22,19 @@ jobs:
         with:
           fetch-depth: 0 # 변경 이력 전체. 체인지로그 생성에 필요하다.
 
+      # 패키저는 GitHub 릴리스를 만들 저장소 주소를 origin 리모트 URL 에서 뽑는다.
+      #   if [[ "$si_repo_url" == "https://github.com"* ]]; then ... fi
+      # 이 값이 비면 릴리스 생성을 '아무 출력 없이' 건너뛴다(실패로 잡히지도 않는다).
+      # 그래서 origin 을 명시적으로 고정하고, 패키저가 보게 될 값을 찍어 둔다.
+      - name: Pin origin and show packager inputs
+        env:
+          REPO: ${{ github.repository }}
+        run: |
+          git remote set-url origin "https://github.com/${REPO}"
+          echo "origin: $(git remote get-url origin)"
+          echo "tags at HEAD: $(git tag --points-at HEAD)"
+          echo "GH_API_TOKEN set: ${GH_API_TOKEN:+yes}"
+
       - name: Package and release
         uses: BigWigsMods/packager@v2
         with:
