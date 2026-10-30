@@ -9,3 +9,7 @@ desktop.ini
 # packaging output
 *.zip
 .release/
+
+# never commit tokens (the packager reads .env if present)
+.env
+.env.*
