@@ -2,7 +2,7 @@
 ## Title: HoverAuction
 ## Notes: Hover a bag item with the Auction House open and tap Space to load it into the sell slot; tap again while still hovering it to post.
 ## Notes-koKR: 경매장을 연 상태에서 가방 아이템 위에 마우스를 올리고 스페이스를 누르면 판매 대기, 같은 아이템 위에서 한 번 더 누르면 등록됩니다.
-## Version: 4.1
+## Version: 4.2
 ## Author: cykim
 ## SavedVariables: HoverAuctionDB
 ## X-Curse-Project-ID: 1774056

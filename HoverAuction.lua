@@ -314,7 +314,15 @@ local function NeedsMaxQuantityStep(sellFrame)
 
 	local quantity = sellFrame:GetQuantity()
 	local maxQuantity = sellFrame:GetMaxQuantity()
-	return type(quantity) == "number" and type(maxQuantity) == "number" and quantity < maxQuantity
+	if type(quantity) ~= "number" or type(maxQuantity) ~= "number" then return false end
+
+	-- 사용자가 수량을 직접 입력했으면 그 값을 존중한다.
+	-- 블리자드는 아이템을 판매창에 올릴 때 수량칸을 1로 되돌리므로,
+	-- 1 이 아니라는 건 사용자가 직접 바꿨다는 뜻이다.
+	-- 이 검사가 없으면 일부만 올리려고 입력한 수량을 '최대'가 덮어쓴다.
+	if quantity ~= 1 then return false end
+
+	return maxQuantity > 1
 end
 
 local function UpdateTarget()
